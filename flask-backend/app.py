@@ -71,22 +71,24 @@ class getDataClass(Resource):
       tmpfileList = [{"path": absoluteSubFolder + s, "similarity": 0, "isLast": True, "isRepresentative": False} for s in tmpfileList]
       fileList = fileList + tmpfileList
     
-    fileList = fileList[0:200]
+    fileList = fileList[0:1000]
     # Measure similarity
     for i in range (len(fileList) - 1):
       # Check if current keyFrame is Last frame in video
       curFrameVideo = fileList[i]["path"].split('/')[2]
       nextFrameVideo = fileList[i+1]["path"].split('/')[2]
       if curFrameVideo != nextFrameVideo:
-        current_app.logger.info("i is %d" % i)
         # current_app.logger.info("Different folder (video) (%s vs %s)" % (curFrameVideo, nextFrameVideo))
         continue
       
       
       # Check similarity between two frames
-      similarity = mse(fileList[i]["path"], fileList[i+1]["path"])
+      similarity = mse_grayscale(fileList[i]["path"], fileList[i+1]["path"])
       fileList[i]["similarity"] = similarity
       fileList[i]["isLast"] = False
+
+      if i % 100 == 0:
+        current_app.logger.info("Processing: (%d/%d) done" % (i, len(fileList)))
     
     # Change name for react
     # fileList = [{"path": '../..' + s["path"], "similarity": s["similarity"], "isLast": s["isLast"], "isRepresentative": s["isRepresentative"]} for s in fileList]

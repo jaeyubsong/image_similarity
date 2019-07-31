@@ -13,7 +13,9 @@ import Grid from '@material-ui/core/Grid'
 function App() {
   const [count, setCount] = useState(0);
   const [data, setData] = useState({ hits: [] });
+  const [similarity, setSimilarity] = useState(0);
 
+  const [originalImageListResult, setOriginalImageListResult] = useState([])
   const [imageListResult, setImageListResult] = useState([])
 
 
@@ -31,25 +33,51 @@ function App() {
     //   require('../..' + value.path)
     // ))
     // const tempImageListResult = {...result.data}
+    console.log("# of frames before processing: " + result.data.length)
+    setOriginalImageListResult(result.data)
     const newImageListResult = []
     
     let tempImageListResult = []
     for (let i = 0; i < result.data.length; i++) {
       tempImageListResult.push(result.data[i])
-      if (result.data[i].isLast == true || result.data[i].similarity < 0.3) {
+      if (result.data[i].isLast == true || result.data[i].similarity > similarity) {
         // const tmp = {...tempImageListResult}
         // console.log(tmp)
         newImageListResult.push(tempImageListResult)
         tempImageListResult = []
       }
     }
-    console.log("new image result is: ")
-    console.log(newImageListResult)
+    console.log("# of frames after processing: " + newImageListResult.length)
+    // console.log("new image result is: ")
+    // console.log(newImageListResult)
     // Object.assign(newImageListResult, {data: result.data})
 
     // Process data
     setImageListResult(newImageListResult)
 
+  }
+
+  const changeSimilarityThreshold = similarity => {
+    console.log("# of frames before processing: " + originalImageListResult.length)
+    const newImageListResult = []
+    
+    let tempImageListResult = []
+    for (let i = 0; i < originalImageListResult.length; i++) {
+      tempImageListResult.push(originalImageListResult[i])
+      if (originalImageListResult[i].isLast == true || originalImageListResult[i].similarity > similarity) {
+        // const tmp = {...tempImageListResult}
+        // console.log(tmp)
+        newImageListResult.push(tempImageListResult)
+        tempImageListResult = []
+      }
+    }
+    console.log("# of frames after processing: " + newImageListResult.length)
+    // console.log("new image result is: ")
+    // console.log(newImageListResult)
+    // Object.assign(newImageListResult, {data: result.data})
+
+    // Process data
+    setImageListResult(newImageListResult)
   }
 
 
@@ -71,11 +99,21 @@ function App() {
         }}>
           Reload database
         </button>
+        <input style={{width: "100px"}} type="number" value={similarity} onChange={(event) => {
+                      setSimilarity(parseInt(event.target.value))
+        }} />
+        <button onClick={() => {
+          console.log("Change similarity");
+          changeSimilarityThreshold(similarity);
+        }}>
+          similarity
+        </button>
+
       </div>
       {imageListResult.map((value, index) => (
-        <Grid container key={index}>
+        <Grid key={index} container key={index}>
           {value.map((mValue, mIndex) => 
-              <Grid item padding={5}>
+              <Grid key={mValue.path} item padding={5}>
                 <img key={mValue.path} src={process.env.PUBLIC_URL + mValue.path} style={{ width: 300}} />
                 {mValue.similarity.toFixed(3)}
               </Grid>

@@ -13,8 +13,28 @@ def mse(a, b):
   # sum of the squared difference between the two images;
   # NOTE: the two images must have the same dimension
   err = np.sum((imageA.astype("float") - imageB.astype("float")) ** 2)
-  print("shape[0] is " + str(imageA.shape[0]))
-  print("shape[1] is " + str(imageA.shape[1]))
+  # print("shape[0] is " + str(imageA.shape[0]))
+  # print("shape[1] is " + str(imageA.shape[1]))
+  # print("err is " + str(err))
+  err /= float(imageA.shape[0] * imageA.shape[1])
+	
+  # return the MSE, the lower the error, the more "similar"
+  # the two images are
+  return err
+
+
+def mse_grayscale(a, b):
+  imageA = cv2.imread(a)
+  imageB = cv2.imread(b)
+
+  imageA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
+  imageB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)
+  # the 'Mean Squared Error' between the two images is the
+  # sum of the squared difference between the two images;
+  # NOTE: the two images must have the same dimension
+  err = np.sum((imageA.astype("float") - imageB.astype("float")) ** 2)
+  # print("shape[0] is " + str(imageA.shape[0]))
+  # print("shape[1] is " + str(imageA.shape[1]))
   # print("err is " + str(err))
   err /= float(imageA.shape[0] * imageA.shape[1])
 	
