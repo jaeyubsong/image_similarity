@@ -1,0 +1,7 @@
+mongoData
+dump
+
+flask-backend/docker_models/aster_git
+flask-backend/docker_models/pixel_link_git
+flask-backend/docker_models/pixel_out
+keyframes/

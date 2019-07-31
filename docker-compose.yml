@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  react-client:
+    build:
+      context: ./react-frontend/
+      dockerfile: local.Dockerfile
+    volumes:
+      - './react-frontend/:/usr/src/app'
+      - '/usr/src/app/node_modules'
+      - ./keyframes:/usr/src/app/public/keyframes
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - flask-api
+    image: test_image_similarity_react
+  flask-api:
+    build:
+      context: ./flask-backend/
+      dockerfile: Dockerfile
+    command: python -u app.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask-backend:/flask-backend
+      - ./keyframes:/keyframes
+    user: ${CURRENT_UID}
+    image: test_image_similarity_flask

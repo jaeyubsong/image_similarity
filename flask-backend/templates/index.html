@@ -1,0 +1,24 @@
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+  <title>METHOD EXERCISE</title>
+</head>
+<body>
+  <form action="/new" method="POST">
+    Name to add : 
+    <input type="text" name="name"></input><br>
+    Description : 
+    <input type="text" name="description"></input>
+    <input type="submit" value="Submit"></input>
+  </form>
+  <form action="/delete" method="POST">
+    <br>Name to delete : 
+    <input type="text" name="name_to_delete"></input>
+    <input type="submit" value="Delete"></input><br>
+  </form>
+</body>
+
+{% for item in items %}
+  <h1> {{ item.name }}</h1>
+  <p> {{ item.description }}</p>
+{% endfor %}
